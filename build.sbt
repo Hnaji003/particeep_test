@@ -13,7 +13,7 @@ lazy val deps = Seq(
 
 lazy val root = (project in file("."))
   .settings(
-    name := "java-interview",
+    name := "java_interview",
     libraryDependencies ++= deps
   )
 

@@ -5,6 +5,9 @@ import io.vavr.*;
 import io.vavr.control.Option;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 /**
  * You should complete the function in this class
@@ -22,16 +25,25 @@ class AsyncTest {
       new Ceo("ceo_3", "Bill")
   );
 
+  private static ExecutorService executor = Executors.newCachedThreadPool();
+
   public static CompletableFuture<Option<Ceo>> getCeoById(String ceo_id) {
-    return null;
+    return CompletableFuture.supplyAsync(() -> {
+      return ceos.find(c -> c.getId().equals(ceo_id));
+    }, executor);
   }
 
+
   public static CompletableFuture<Option<Enterprise>> getEnterpriseByCeoId(String ceo_id) {
-    return null;
+    return CompletableFuture.supplyAsync(() -> {
+      return enterprises.find(e -> e.getCeoId().equals(ceo_id));
+    }, executor);
   }
 
   public static CompletableFuture<Tuple2<Option<Ceo>, Option<Enterprise>>> getCEOAndEnterprise(String ceo_id) {
-    return null;
+    CompletableFuture<Option<Ceo>> c = getCeoById(ceo_id);
+    CompletableFuture<Option<Enterprise>> e = getEnterpriseByCeoId(ceo_id);
+    return c.thenCombine(e, (ceo, entreprise) -> Tuple.of(ceo, entreprise));
   }
 
 }

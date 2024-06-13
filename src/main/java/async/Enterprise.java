@@ -15,4 +15,8 @@ class Enterprise {
   public String toString() {
     return "Enterprise_" + name;
   }
+
+  public String getCeoId() {
+    return this.ceo_id;
+  }
 }
